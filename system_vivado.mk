@@ -119,15 +119,15 @@ ifeq ($(GIT_STATUS),)
    export GIT_HASH_MSG   = $(GIT_HASH_LONG)
    export IMAGENAME      = $(PROJECT)-$(PRJ_VERSION)-$(BUILD_TIME)-$(USER)-$(GIT_HASH_SHORT)$(RECONFIG_STATIC_HASH)
 else
-   export GIT_TAG_MSG    = 
+   export GIT_TAG_MSG    =
    export GIT_HASH_MSG   = dirty
    # Check if we are using GIT tagging
    ifeq ($(GIT_BYPASS), 0)
       export GIT_TAG_NAME   = Uncommitted code detected
-      export GIT_HASH_LONG  = 
-      export GIT_HASH_SHORT = 
+      export GIT_HASH_LONG  =
+      export GIT_HASH_SHORT =
    else
-      export GIT_STATUS     = 
+      export GIT_STATUS     =
       export GIT_TAG_NAME   = Bypassing Build GIT Tagging
       export GIT_HASH_LONG  = 0
       export GIT_HASH_SHORT = 0
@@ -143,7 +143,7 @@ endif
 export SDK_PRJ    = $(abspath $(OUT_DIR)/$(VIVADO_PROJECT).sdk)
 export SDK_ELF    = $(abspath $(SDK_PRJ)/$(PROJECT).elf)
 ifndef LD_PRELOAD
-export LD_PRELOAD = 
+export LD_PRELOAD =
 endif
 
 ifndef SDK_LIB
@@ -235,7 +235,7 @@ $(VIVADO_DEPEND) :
 	@test -d $(OUT_DIR) || mkdir $(OUT_DIR)
 	@cd $(OUT_DIR); rm -f firmware
 	@cd $(OUT_DIR); ln -s $(TOP_DIR) firmware
-	@cd $(OUT_DIR); vivado -mode batch -source $(RUCKUS_DIR)/vivado_project.tcl -notrace 
+	@cd $(OUT_DIR); vivado -mode batch -source $(RUCKUS_DIR)/vivado_project.tcl -notrace
 
 ###############################################################
 #### Vivado Sources ###########################################
@@ -248,7 +248,7 @@ $(SOURCE_DEPEND) : $(VIVADO_DEPEND)
 #### Vivado Batch #############################################
 ###############################################################
 .PHONY : bit bin prom
-bit bin prom : $(SOURCE_DEPEND)
+bit bin prom :: $(SOURCE_DEPEND)
 	$(call ACTION_HEADER,"Vivado Batch Build for .bit/.bin/.mcs")
 	@cd $(OUT_DIR); vivado -mode batch -source $(RUCKUS_DIR)/vivado_build.tcl
 	@echo "Don't forget to 'git commit and git push' the images file when the image is stable!"
@@ -257,7 +257,7 @@ bit bin prom : $(SOURCE_DEPEND)
 #### Vivado Interactive #######################################
 ###############################################################
 .PHONY : interactive
-interactive : $(SOURCE_DEPEND)
+interactive :: $(SOURCE_DEPEND)
 	$(call ACTION_HEADER,"Vivado Interactive")
 	@cd $(OUT_DIR); vivado -mode tcl -source $(RUCKUS_DIR)/vivado_env_var.tcl
 
@@ -265,7 +265,7 @@ interactive : $(SOURCE_DEPEND)
 #### Vivado Gui ###############################################
 ###############################################################
 .PHONY : gui
-gui : $(SOURCE_DEPEND)
+gui :: $(SOURCE_DEPEND)
 	$(call ACTION_HEADER,"Vivado GUI")
 	@cd $(OUT_DIR); vivado -source $(RUCKUS_DIR)/vivado_gui.tcl $(VIVADO_PROJECT).xpr
 
@@ -273,7 +273,7 @@ gui : $(SOURCE_DEPEND)
 #### Vivado Sythnesis Only ####################################
 ###############################################################
 .PHONY : syn
-syn : $(SOURCE_DEPEND)
+syn :: $(SOURCE_DEPEND)
 	$(call ACTION_HEADER,"Vivado Synthesis Only")
 	@cd $(OUT_DIR); export SYNTH_ONLY=1; vivado -mode batch -source $(RUCKUS_DIR)/vivado_build.tcl
 
@@ -281,7 +281,7 @@ syn : $(SOURCE_DEPEND)
 #### Vivado Sythnesis DCP  ####################################
 ###############################################################
 .PHONY : dcp
-dcp : $(SOURCE_DEPEND)
+dcp :: $(SOURCE_DEPEND)
 	$(call ACTION_HEADER,"Vivado Synthesis DCP")
 	@cd $(OUT_DIR); export SYNTH_DCP=1; vivado -mode batch -source $(RUCKUS_DIR)/vivado_build.tcl
 
@@ -289,7 +289,7 @@ dcp : $(SOURCE_DEPEND)
 #### Vivado SDK ###############################################
 ###############################################################
 .PHONY : sdk
-sdk : $(SOURCE_DEPEND)
+sdk :: $(SOURCE_DEPEND)
 	$(call ACTION_HEADER,"Vivado SDK GUI")
 	@cd $(OUT_DIR); xsdk -workspace $(OUT_DIR)/$(VIVADO_PROJECT).sdk \
       -vmargs -Dorg.eclipse.swt.internal.gtk.cairoGraphics=false
@@ -298,7 +298,7 @@ sdk : $(SOURCE_DEPEND)
 #### Vivado SDK ELF ###########################################
 ###############################################################
 .PHONY : elf
-elf : $(SOURCE_DEPEND)
+elf :: $(SOURCE_DEPEND)
 	$(call ACTION_HEADER,"Vivado SDK .ELF generation")
 	@cd $(OUT_DIR); vivado -mode batch -source $(RUCKUS_DIR)/vivado_sdk_bit.tcl
 	@echo ""
@@ -309,7 +309,7 @@ elf : $(SOURCE_DEPEND)
 #### Vivado PyRogue ###########################################
 ###############################################################
 .PHONY : pyrogue
-pyrogue : $(SOURCE_DEPEND)
+pyrogue :: $(SOURCE_DEPEND)
 	$(call ACTION_HEADER,"Generaring pyrogue.tar.gz file")
 	@cd $(OUT_DIR); tclsh $(RUCKUS_DIR)/vivado_pyrogue.tcl
 
@@ -317,7 +317,7 @@ pyrogue : $(SOURCE_DEPEND)
 #### Vivado CPSW ##############################################
 ###############################################################
 .PHONY : yaml
-yaml : $(SOURCE_DEPEND)
+yaml :: $(SOURCE_DEPEND)
 	$(call ACTION_HEADER,"Generaring cpsw.tar.gz file")
 	@cd $(OUT_DIR); tclsh $(RUCKUS_DIR)/vivado_cpsw.tcl
 
@@ -325,7 +325,7 @@ yaml : $(SOURCE_DEPEND)
 #### Vivado WIS ###############################################
 ###############################################################
 .PHONY : wis
-wis : $(SOURCE_DEPEND)
+wis :: $(SOURCE_DEPEND)
 	$(call ACTION_HEADER,"Generating init_wis.tcl file for Windows OS")
 	@cd $(OUT_DIR); vivado -mode batch -source $(RUCKUS_DIR)/vivado_wis.tcl
 
@@ -333,7 +333,7 @@ wis : $(SOURCE_DEPEND)
 #### Vivado XSIM Simulation ###################################
 ###############################################################
 .PHONY : xsim
-xsim : $(SOURCE_DEPEND)
+xsim :: $(SOURCE_DEPEND)
 	$(call ACTION_HEADER,"Vivado XSIM Simulation")
 	@cd $(OUT_DIR); vivado -mode batch -source $(RUCKUS_DIR)/vivado_xsim.tcl
 
@@ -341,7 +341,7 @@ xsim : $(SOURCE_DEPEND)
 #### Vivado VCS Simulation ####################################
 ###############################################################
 .PHONY : vcs
-vcs : $(SOURCE_DEPEND)
+vcs :: $(SOURCE_DEPEND)
 	$(call ACTION_HEADER,"Generating the VCS Simulation scripts")
 	@cd $(OUT_DIR); vivado -mode batch -source $(RUCKUS_DIR)/vivado_vcs.tcl
 
@@ -358,5 +358,5 @@ sources     : $(SOURCE_DEPEND)
 #### Clean ####################################################
 ###############################################################
 .PHONY : clean
-clean:
+clean::
 	rm -rf $(OUT_DIR)
