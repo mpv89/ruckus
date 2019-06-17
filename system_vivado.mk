@@ -80,6 +80,9 @@ endif
 ifndef VIVADO_PROJECT_SIM_TIME
 export VIVADO_PROJECT_SIM_TIME = 1000 ns
 endif
+ifndef SIM_PARAMETERS
+export SIM_PARAMETERS ""
+endif
 
 # Synthesis Variables
 export VIVADO_VERSION   = $(shell vivado -version | grep -Po "(\d+\.)+\d+")

@@ -1,10 +1,10 @@
 ##############################################################################
 ## This file is part of 'SLAC Firmware Standard Library'.
-## It is subject to the license terms in the LICENSE.txt file found in the 
-## top-level directory of this distribution and at: 
-##    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html. 
-## No part of 'SLAC Firmware Standard Library', including this file, 
-## may be copied, modified, propagated, or distributed except according to 
+## It is subject to the license terms in the LICENSE.txt file found in the
+## top-level directory of this distribution and at:
+##    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+## No part of 'SLAC Firmware Standard Library', including this file,
+## may be copied, modified, propagated, or distributed except according to
 ## the terms contained in the LICENSE.txt file.
 ##############################################################################
 
@@ -31,6 +31,7 @@ set VIVADO_VERSION   $::env(VIVADO_VERSION)
 set RUCKUS_DIR       $::env(RUCKUS_DIR)
 set VIVADO_PROJECT_SIM       $::env(VIVADO_PROJECT_SIM)
 set VIVADO_PROJECT_SIM_TIME  $::env(VIVADO_PROJECT_SIM_TIME)
+set SIM_PARAMETERS     $::env(SIM_PARAMETERS)
 
 # Vivado SDK Variables
 set SDK_PRJ $::env(SDK_PRJ)
@@ -45,7 +46,7 @@ set RECONFIG_PBLOCK     $::env(RECONFIG_PBLOCK)
 ########################################################
 ## Set Non-Environmental variables
 ########################################################
-set vivado_cmd [catch { 
+set vivado_cmd [catch {
    set PRJ_TOP  [get_property top [current_fileset]]
    set SIM_TOP  [get_property top [get_filesets sim_1]]
-} _RESULT]  
+} _RESULT]
